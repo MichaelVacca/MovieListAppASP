@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace MovieListApp.Models
 {
@@ -17,5 +18,17 @@ namespace MovieListApp.Models
 		[Range(1, 5, ErrorMessage =
 			"Rating must be between 1 and 5.")]
 		public int? Rating { get; set; }
+
+		[Required(ErrorMessage = "Please enter a genre")]
+		public string GenreId { get; set; } = String.Empty;
+
+		[ValidateNever]
+		public Genre Genre
+		{
+			get;
+			set;
+		} = null!;
+
+		public string Slug => Name?.Replace(' ', '-').ToLower() + "-" + Year?.ToString();
 	}
 }

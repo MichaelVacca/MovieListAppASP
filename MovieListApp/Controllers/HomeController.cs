@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieListApp.Models;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace MovieListApp.Controllers
 {
@@ -13,6 +14,7 @@ namespace MovieListApp.Controllers
 		public IActionResult Add()
 		{
 			ViewBag.Action = "Add";
+			ViewBag.Genres = _movieContext.Genres.OrderBy(g => g.Name).ToList();
 			return View("Edit", new Movie());
 		}
 
@@ -20,6 +22,7 @@ namespace MovieListApp.Controllers
 		public IActionResult Edit(int id)
 		{
 			ViewBag.Action = "Edit";
+			ViewBag.Genres = _movieContext.Genres.OrderBy(g => g.Name).ToList();
 			var movie = _movieContext.Movies.Find(id);
 			return View(movie);
 		}
@@ -40,6 +43,7 @@ namespace MovieListApp.Controllers
 			{
 				ViewBag.Action =
 					(movie.MovieId == 0) ? "Add" : "Edit";
+				ViewBag.Genres = _movieContext.Genres.OrderBy(g => g.Name).ToList();
 				return View(movie);
 			}
 		}
@@ -67,9 +71,13 @@ namespace MovieListApp.Controllers
 
 		public IActionResult Index()
 		{
-			var movies = _movieContext.Movies.OrderBy(
-				m => m.Name).ToList();
+
+			var movies = _movieContext.Movies.Include(m => m.Genre)
+				.OrderBy(m => m.Name).ToList();
 			return View(movies);
+/*			var movies = _movieContext.Movies.OrderBy(
+				m => m.Name).ToList();
+			return View(movies);*/
 		}
 
 		public IActionResult Privacy()

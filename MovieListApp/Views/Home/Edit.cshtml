@@ -17,6 +17,15 @@
 		<input asp-for="Year" class="form-control">
 	</div>
 	<div class="mb-3">
+		<label asp-for="GenreId" class="form-label">Genre</label>
+		<select asp-for="GenreId" class="form-select"><option>Select a genre</option>
+		@foreach (Genre g in ViewBag.Genres)
+		{
+			<option value= "@g.GenreId">@g.Name</option>
+		}
+		</select>
+	</div>
+	<div class="mb-3">
 		<label asp-for="Rating" class="form-label">Rating</label>
 		<input asp-for="Rating" class="form-control">
 	</div>
